@@ -194,7 +194,13 @@ public class MyArrayList<T> implements List<T> {
 	@Override
 	public T remove(int index) {
 		// TODO: FILL THIS IN!
-		return null;
+		T previous = get(index);
+		for(int i = index; i<=size-1;i++) {
+			array[i] = array[i+1];
+			array[i+1] = null;
+		}
+		size--;
+		return previous;
 	}
 
 	@Override
@@ -220,9 +226,9 @@ public class MyArrayList<T> implements List<T> {
 		if(element == null) {
 			throw new NullPointerException();
 		}
-		T previouse = array[index];
+		T previous = array[index];
 		array[index] = element;
-		return previouse;
+		return previous;
 	}
 
 	@Override
