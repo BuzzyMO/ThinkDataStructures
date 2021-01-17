@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
 
 public class WikiPhilosophy {
@@ -41,5 +42,18 @@ public class WikiPhilosophy {
      */
     public static void testConjecture(String destination, String source, int limit) throws IOException {
         // TODO: FILL THIS IN!
+    	Elements paragraphs = wf.fetchWikipedia(source);
+    	WikiParser parser = new WikiParser(paragraphs);
+    	Element ElLink = parser.findFirstLink();
+    	String link = "https://en.wikipedia.org"+ElLink.attr("href");
+    	if(link.equals(destination)) {
+    		visited.add(link);
+    		System.out.println(visited);
+    	} else {
+    		System.out.println("LINK :" + link);
+    		visited.add(link);
+    		testConjecture(destination, link, limit);
+    	}
+    	
     }
 }
