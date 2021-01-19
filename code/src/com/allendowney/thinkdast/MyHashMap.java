@@ -42,10 +42,14 @@ public class MyHashMap<K, V> extends MyBetterMap<K, V> implements Map<K, V> {
 	 */
 	protected void rehash() {
 		// TODO: FILL THIS IN!
+		
+		//save old buckets
 		List<MyLinearMap<K, V>> maps = super.maps;
 		
+		//create new buckets
 		makeMaps(maps.size() * 2);
 		
+		//add old entries in new buckets
 		for(MyLinearMap<K, V> bucket: maps) {
 			for(Entry<K, V> e: bucket.getEntries()) {
 				put((K) e.getKey(), (V) e.getValue());
