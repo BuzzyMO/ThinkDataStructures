@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 import redis.clients.jedis.Jedis;
 
@@ -61,7 +63,11 @@ public class WikiSearch {
 	 */
 	public WikiSearch or(WikiSearch that) {
 		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> union = new HashMap<String, Integer>(map);
+		for(String t: that.map.keySet()) {
+			union.put(t, totalRelevance(this.getRelevance(t), that.getRelevance(t)));
+		}
+		return new WikiSearch(union);
 	}
 
 	/**
@@ -72,7 +78,13 @@ public class WikiSearch {
 	 */
 	public WikiSearch and(WikiSearch that) {
 		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> intersect = new HashMap<String, Integer>();
+		for(String t: map.keySet()) {
+			if(that.map.containsKey(t)) {
+				intersect.put(t, totalRelevance(map.get(t),that.map.get(t)));
+			}
+		}
+		return new WikiSearch(intersect);
 	}
 
 	/**
@@ -82,8 +94,11 @@ public class WikiSearch {
 	 * @return New WikiSearch object.
 	 */
 	public WikiSearch minus(WikiSearch that) {
-		// TODO: FILL THIS IN!
-		return null;
+		Map<String, Integer> minusRep = new HashMap<String, Integer>(map);
+		for(String t: that.map.keySet()) {
+			minusRep.remove(t);
+		}
+		return new WikiSearch(minusRep);
 	}
 
 	/**
@@ -105,7 +120,15 @@ public class WikiSearch {
 	 */
 	public List<Entry<String, Integer>> sort() {
 		// TODO: FILL THIS IN!
-		return null;
+		List<Entry<String, Integer>> list = new LinkedList<Entry<String, Integer>>(map.entrySet());
+		Comparator<Entry<String, Integer>> comp = new Comparator<Entry<String, Integer>>() {
+			@Override
+			public int compare(Entry<String, Integer> ent1, Entry<String, Integer> ent2) {
+				return ent1.getValue().compareTo(ent2.getValue());
+			}
+		};
+		Collections.sort(list, comp);
+		return list;
 	}
 
 
